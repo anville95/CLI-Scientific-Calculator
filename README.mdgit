@@ -1,0 +1,1 @@
+"# CLI-Scientific-Calculator"  initgit add README.mdgit commit -m "first commit"git branch -M maingit remote add origin https://github.com/anville95/CLI-Scientific-Calculator.gitgit push -u origin main
