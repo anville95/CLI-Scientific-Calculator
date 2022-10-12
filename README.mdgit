@@ -1,1 +1,10 @@
-"# CLI-Scientific-Calculator"  initgit add README.mdgit commit -m "first commit"git branch -M maingit remote add origin https://github.com/anville95/CLI-Scientific-Calculator.gitgit push -u origin main
+Hi
+This is a Scientific Calculator with no graphical interface.
+You must have JDK11 and later intalled to run the Calc, otherwise it might not function as expected.
+To run the Calc, navigate to 'Compiled Classes' after downloading and run the 'Calc.class' using command 'Java Calc', The '.class' extension is not necessary when running class.
+You simply type in the math expression and press 'return'/'enter'.
+The Calculator exposes all the steps it goes through to solve your expression and this enables you to understand it's implementation.
+You may type in 'exit' to close the Calculator.
+You may also type 'help' to list all commands of the Calc.
+Thank you for Downloading.
+Good luck!
