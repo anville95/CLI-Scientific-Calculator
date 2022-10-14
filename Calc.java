@@ -57,7 +57,7 @@ class Calc {
         // tan^-1
         while (builder.indexOf("tan^-1") >= 0) {
             builder.setCharAt(builder.indexOf("tan^-1"), 'z');
-            builder.delete(builder.indexOf("tan^-1") + 1, builder.indexOf("tan^-1") + 6);
+            builder.delete(builder.indexOf("zan^-1") + 1, builder.indexOf("zan^-1") + 6);
         }
         // cosine
         while (builder.indexOf("cos") >= 0) {
@@ -300,7 +300,7 @@ class Calc {
         // cosines
         while (expressionList.contains("c")) {
             String numString = expressionList.get(expressionList.indexOf("c") + 1);
-            Double number = Double.valueOf(numString);
+            Double number = Double.valueOf(numString) * 3.141592653589793 / 180;
             expressionList.set(expressionList.indexOf("c") + 1, String.valueOf(Math.cos(number)));
             expressionList.remove("c");
         }
@@ -310,7 +310,7 @@ class Calc {
         // sines
         while (expressionList.contains("s")) {
             String numString = expressionList.get(expressionList.indexOf("s") + 1);
-            Double number = Double.valueOf(numString);
+            Double number = Double.valueOf(numString) * 3.141592653589793 / 180;
             expressionList.set(expressionList.indexOf("s") + 1, String.valueOf(Math.sin(number)));
             expressionList.remove("s");
         }
@@ -320,7 +320,7 @@ class Calc {
         // tangents
         while (expressionList.contains("t")) {
             String numString = expressionList.get(expressionList.indexOf("t") + 1);
-            Double number = Double.valueOf(numString);
+            Double number = Double.valueOf(numString) * 3.141592653589793 / 180;
             expressionList.set(expressionList.indexOf("t") + 1, String.valueOf(Math.tan(number)));
             expressionList.remove("t");
         }
@@ -330,7 +330,7 @@ class Calc {
         // cosh
         while (expressionList.contains("C")) {
             String numString = expressionList.get(expressionList.indexOf("C") + 1);
-            Double number = Double.valueOf(numString);
+            Double number = Double.valueOf(numString) * 3.141592653589793 / 180;
             expressionList.set(expressionList.indexOf("C") + 1, String.valueOf(Math.cosh(number)));
             expressionList.remove("C");
         }
@@ -340,7 +340,7 @@ class Calc {
         // sinh
         while (expressionList.contains("S")) {
             String numString = expressionList.get(expressionList.indexOf("S") + 1);
-            Double number = Double.valueOf(numString);
+            Double number = Double.valueOf(numString) * 3.141592653589793 / 180;
             expressionList.set(expressionList.indexOf("S") + 1, String.valueOf(Math.sinh(number)));
             expressionList.remove("S");
         }
@@ -350,7 +350,7 @@ class Calc {
         // tanh
         while (expressionList.contains("T")) {
             String numString = expressionList.get(expressionList.indexOf("T") + 1);
-            Double number = Double.valueOf(numString);
+            Double number = Double.valueOf(numString) * 3.141592653589793 / 180;
             expressionList.set(expressionList.indexOf("T") + 1, String.valueOf(Math.tanh(number)));
             expressionList.remove("T");
         }
@@ -361,7 +361,8 @@ class Calc {
         while (expressionList.contains("x")) {
             String numString = expressionList.get(expressionList.indexOf("x") + 1);
             Double number = Double.valueOf(numString);
-            expressionList.set(expressionList.indexOf("x") + 1, String.valueOf(Math.acos(number)));
+            expressionList.set(expressionList.indexOf("x") + 1,
+                    String.valueOf(Math.acos(number) * 180 / 3.141592653589793));
             expressionList.remove("x");
         }
         Print.info("After solving all cos^-1! \nList elements are: ");
@@ -371,7 +372,8 @@ class Calc {
         while (expressionList.contains("y")) {
             String numString = expressionList.get(expressionList.indexOf("y") + 1);
             Double number = Double.valueOf(numString);
-            expressionList.set(expressionList.indexOf("y") + 1, String.valueOf(Math.asin(number)));
+            expressionList.set(expressionList.indexOf("y") + 1,
+                    String.valueOf(Math.asin(number) * 180 / 3.141592653589793));
             expressionList.remove("y");
         }
         Print.info("After solving all sin^-1! \nList elements are: ");
@@ -381,7 +383,8 @@ class Calc {
         while (expressionList.contains("z")) {
             String numString = expressionList.get(expressionList.indexOf("z") + 1);
             Double number = Double.valueOf(numString);
-            expressionList.set(expressionList.indexOf("z") + 1, String.valueOf(Math.atan(number)));
+            expressionList.set(expressionList.indexOf("z") + 1,
+                    String.valueOf(Math.atan(number) * 180 / 3.141592653589793));
             expressionList.remove("z");
         }
         Print.info("After solving all tan^-1! \nList elements are: ");
@@ -432,21 +435,50 @@ class Calc {
                 expressionList.remove(index);
             }
         }
+        // removing subsequent operators
+        while (expressionList.get(0).equals("-") || expressionList.get(0).equals("+")) {
+            expressionList.remove(0);
+        }
+        while (expressionList.get(expressionList.size() - 1).equals("-")
+                || expressionList.get(expressionList.size() - 1).equals("+")) {
+            expressionList.remove(expressionList.size() - 1);
+        }
+        Print.info("After removing leading and trailing operators");
+        expressionList.forEach(r -> System.out.println("          " + r));
+        for (int index = 1; index < expressionList.size(); index++) {
+            if (!isNumber(expressionList.get(index)) && !isNumber(expressionList.get(index - 1))) {
+                if (expressionList.get(index).equals("-") || expressionList.get(index - 1).equals("-")) {
+                    expressionList.set(index, "-");
+                    expressionList.remove(index - 1);
+                } else {
+                    expressionList.remove(index - 1);
+                }
+                index -= 1;
+            }
+        }
+
+        Print.info("Removed recurring operators, list elements after removal: ");
+        expressionList.forEach(r -> System.out.println("       " + r));
         // addition
         while (expressionList.contains("+")) {
-            int index = expressionList.indexOf("+");
-            Double firstOperand = Double.valueOf(expressionList.get(index - 1));
-            Double secondOperand = Double.valueOf(expressionList.get(index + 1));
-            firstOperand = firstOperand + secondOperand;
-            expressionList.set(index - 1, String.valueOf(firstOperand));
-            expressionList.remove(index + 1);
-            expressionList.remove("+");
+            if (expressionList.indexOf("+") == 0) {
+                expressionList.remove("+");
+            } else {
+                int index = expressionList.indexOf("+");
+                Double firstOperand = Double.valueOf(expressionList.get(index - 1));
+                Double secondOperand = Double.valueOf(expressionList.get(index + 1));
+                firstOperand = firstOperand + secondOperand;
+                expressionList.set(index - 1, String.valueOf(firstOperand));
+                expressionList.remove(index + 1);
+                expressionList.remove("+");
+            }
         }
         Print.info("After solving all Additions! \nList elements are: ");
         expressionList.forEach(r -> Print.info("         " + r));
         System.out.println();
         // subtraction
         while (expressionList.contains("-")) {
+
             int index = expressionList.indexOf("-");
             Double firstOperand = Double.valueOf(expressionList.get(index - 1));
             Double secondOperand = Double.valueOf(expressionList.get(index + 1));
